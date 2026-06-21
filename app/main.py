@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return{"message":"CallsRM is running" }
+    return {"message": "CallsRM is running"}

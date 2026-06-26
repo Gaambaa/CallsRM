@@ -14,8 +14,12 @@ async def receive_webhook(request: Request, background_tasks: BackgroundTasks):
 async def process_webhook(payload: dict):
     # Heavy logic runs here — DB writes, contact creation, etc.
     # This runs AFTER the 200 OK is already sent to Meta.
-    value = payload["entry"][0]["changes"][0]["value"]
-    
+    try:
+        value = payload["entry"][0]["changes"][0]["value"]
+    except (KeyError, IndexError):
+        # Payload malformed or not from Meta — ignore silently
+        return
+
     if "messages" in value:
         print("mensaje recibido")
     elif "calls" in value:

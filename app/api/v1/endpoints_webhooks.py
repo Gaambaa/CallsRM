@@ -1,4 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, Request
+from app.database import async_session
+from app.services.contact_service import get_or_create_contact
 
 router = APIRouter()
 
@@ -20,7 +22,11 @@ async def process_webhook(payload: dict):
         # Payload malformed or not from Meta — ignore silently
         return
 
-    if "messages" in value:
-        print("mensaje recibido")
-    elif "calls" in value:
-        print("llamada recibida")
+    async with async_session() as session:
+        if "messages" in value:
+            phone_number = value["contacts"][0]["wa_id"]
+            name = value["contacts"][0]["profile"]["name"]
+            contact = await get_or_create_contact(session, phone_number, name)
+            print(f"contacto: {contact.phone_number}")
+        elif "calls" in value:
+            print("llamada recibida")

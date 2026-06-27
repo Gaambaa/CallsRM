@@ -1,6 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, Request
 from app.database import async_session
 from app.services.contact_service import get_or_create_contact
+from app.models import Contact, CallSession, Message
 
 router = APIRouter()
 
@@ -27,6 +28,18 @@ async def process_webhook(payload: dict):
             phone_number = value["contacts"][0]["wa_id"]
             name = value["contacts"][0]["profile"]["name"]
             contact = await get_or_create_contact(session, phone_number, name)
-            print(f"contacto: {contact.phone_number}")
+            
+            msg_data = value["messages"][0]
+            message = Message(
+                message_id=msg_data["id"],
+                contact_id=contact.id,
+                from_number=msg_data["from"],
+                body=msg_data["text"]["body"],
+                type=msg_data["type"],
+                timestamp=int(msg_data["timestamp"])
+            )
+            session.add(message)
+            await session.commit()
+            print(f"mensaje guardado: {message.message_id}")
         elif "calls" in value:
             print("llamada recibida")

@@ -3,6 +3,7 @@ from app.database import async_session
 from app.services.contact_service import get_or_create_contact
 from app.models import Contact, CallSession, Message
 from app.services.n8n_client import forward_to_n8n
+from sqlalchemy.exc import IntegrityError
 
 router = APIRouter()
 
@@ -39,17 +40,22 @@ async def process_webhook(payload: dict):
                 type=msg_data["type"],
                 timestamp=int(msg_data["timestamp"])
             )
-            session.add(message)
-            await session.commit()
-            print(f"mensaje guardado: {message.message_id}")
+            
+            try:
+                session.add(message)
+                await session.commit()
+                print(f"mensaje guardado: {message.message_id}")
+                # Forward the message to n8n if the webhook URL is configured
+                await forward_to_n8n("message", {
+                    "contact_id": contact.id,
+                    "phone_number": contact.phone_number,
+                    "body": message.body,
+                    "timestamp": message.timestamp
+                })
+            except IntegrityError:
+                await session.rollback()
+                print(f"mensaje duplicado ignorado: {message.message_id}")
 
-            # Forward the message to n8n if the webhook URL is configured
-            await forward_to_n8n("message", {
-                "contact_id": contact.id,
-                "phone_number": contact.phone_number,
-                "body": message.body,
-                "timestamp": message.timestamp
-            })
 
         elif "calls" in value:
             call_data = value["calls"][0]
@@ -66,16 +72,19 @@ async def process_webhook(payload: dict):
                 status=call_data.get("status", "ringing"),
                 timestamp=int(call_data["timestamp"])
             )
-            session.add(call)
-            await session.commit()
-            print(f"llamada guardada: {call.call_id}")
-
-            # Forward the call to n8n if the webhook URL is configured
-            await forward_to_n8n("call", {
-                "contact_id": contact.id,
-                "phone_number": call.from_number,
-                "event": call.event,
-                "status": call.status,
-                "timestamp": call.timestamp
-            })
+            try:
+                session.add(call)
+                await session.commit()
+                print(f"llamada guardada: {call.call_id}")
+                # Forward the call to n8n if the webhook URL is configured
+                await forward_to_n8n("call", {
+                    "contact_id": contact.id,
+                    "phone_number": call.from_number,
+                    "event": call.event,
+                    "status": call.status,
+                    "timestamp": call.timestamp
+                })
+            except IntegrityError:
+                await session.rollback()
+                print(f"llamada duplicada ignorada: {call.call_id}")
             

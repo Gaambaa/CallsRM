@@ -41,11 +41,12 @@ async def process_webhook(payload: dict):
             session.add(message)
             await session.commit()
             print(f"mensaje guardado: {message.message_id}")
-            
+
         elif "calls" in value:
             call_data = value["calls"][0]
             phone_number = call_data["from"]
-            contact = await get_or_create_contact(session, phone_number, None)
+            #None for name since calls don't provide a name
+            contact = await get_or_create_contact(session, phone_number, None) 
             
             call = CallSession(
                 call_id=call_data["id"],

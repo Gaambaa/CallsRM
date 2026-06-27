@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from app.database import init_db
 from app.models import Contact, CallSession, Message
 from app.api.v1.endpoints_webhooks import router as webhooks_router
+from app.api.v1.endpoints_contacts import router as contacts_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -11,6 +12,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(webhooks_router)
+app.include_router(contacts_router)
 
 @app.get("/")
 def root():

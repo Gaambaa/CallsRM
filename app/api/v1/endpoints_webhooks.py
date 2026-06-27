@@ -41,5 +41,22 @@ async def process_webhook(payload: dict):
             session.add(message)
             await session.commit()
             print(f"mensaje guardado: {message.message_id}")
+            
         elif "calls" in value:
-            print("llamada recibida")
+            call_data = value["calls"][0]
+            phone_number = call_data["from"]
+            contact = await get_or_create_contact(session, phone_number, None)
+            
+            call = CallSession(
+                call_id=call_data["id"],
+                contact_id=contact.id,
+                from_number=call_data["from"],
+                event=call_data["event"],
+                direction=call_data["direction"],
+                status=call_data.get("status", "ringing"),
+                timestamp=int(call_data["timestamp"])
+            )
+            session.add(call)
+            await session.commit()
+            print(f"llamada guardada: {call.call_id}")
+            

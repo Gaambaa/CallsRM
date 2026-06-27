@@ -2,6 +2,7 @@ from fastapi import APIRouter, BackgroundTasks, Request
 from app.database import async_session
 from app.services.contact_service import get_or_create_contact
 from app.models import Contact, CallSession, Message
+from app.services.n8n_client import forward_to_n8n
 
 router = APIRouter()
 
@@ -42,11 +43,19 @@ async def process_webhook(payload: dict):
             await session.commit()
             print(f"mensaje guardado: {message.message_id}")
 
+            # Forward the message to n8n if the webhook URL is configured
+            await forward_to_n8n("message", {
+                "contact_id": contact.id,
+                "phone_number": contact.phone_number,
+                "body": message.body,
+                "timestamp": message.timestamp
+            })
+
         elif "calls" in value:
             call_data = value["calls"][0]
             phone_number = call_data["from"]
-            #None for name since calls don't provide a name
-            contact = await get_or_create_contact(session, phone_number, None) 
+            # None for name since calls don't provide a name
+            contact = await get_or_create_contact(session, phone_number, None)
             
             call = CallSession(
                 call_id=call_data["id"],
@@ -60,4 +69,13 @@ async def process_webhook(payload: dict):
             session.add(call)
             await session.commit()
             print(f"llamada guardada: {call.call_id}")
+
+            # Forward the call to n8n if the webhook URL is configured
+            await forward_to_n8n("call", {
+                "contact_id": contact.id,
+                "phone_number": call.from_number,
+                "event": call.event,
+                "status": call.status,
+                "timestamp": call.timestamp
+            })
             

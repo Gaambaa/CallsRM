@@ -40,9 +40,9 @@ docker-compose up
 - [x] Receive and store incoming calls
 - [x] Auto-create contacts on first interaction
 - [x] REST API to query contacts, messages and calls
+- [x] n8n integration for workflow automation
 - [ ] Live call handling via WebRTC (Meta Calling API)
 - [ ] Real-time notifications with Socket.IO
-- [ ] n8n integration for workflow automation
 - [ ] Post-call transcription with Whisper
 - [ ] Call summary with LLM
 

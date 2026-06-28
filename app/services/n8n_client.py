@@ -12,4 +12,6 @@ async def forward_to_n8n(event_type: str, data: dict):
     }
     
     async with httpx.AsyncClient() as client:
-        await client.post(settings.n8n_webhook_url, json=payload)
+        response = await client.post(settings.n8n_webhook_url, json=payload)
+        if response.status_code != 200:
+            print(f"n8n webhook failed: {response.status_code}")

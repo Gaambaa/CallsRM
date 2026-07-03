@@ -4,7 +4,7 @@ from app.database import init_db
 from app.models import Contact, CallSession, Message
 from app.api.v1.endpoints_webhooks import router as webhooks_router
 from app.modules.general.routes import router as general_router
-from app.api.v1.endpoints_n8n import router as n8n_router
+from app.modules.n8n.routes import router as n8n_router
 from app.modules.contacts.routes import router as contacts_module_router
 
 @asynccontextmanager

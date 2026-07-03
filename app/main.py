@@ -4,6 +4,8 @@ from app.database import init_db
 from app.models import Contact, CallSession, Message
 from app.api.v1.endpoints_webhooks import router as webhooks_router
 from app.api.v1.endpoints_contacts import router as contacts_router
+from app.api.v1.endpoints_general import router as general_router
+from app.api.v1.endpoints_n8n import router as n8n_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,6 +15,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(webhooks_router)
 app.include_router(contacts_router)
+app.include_router(general_router)
+app.include_router(n8n_router)
 
 @app.get("/")
 def root():

@@ -40,11 +40,15 @@ docker-compose up
 - [x] Receive and store incoming calls
 - [x] Auto-create contacts on first interaction
 - [x] REST API to query contacts, messages and calls
-- [x] n8n integration for workflow automation
+- [x] Forward events to n8n in real time
+- [x] Send WhatsApp messages via Meta API
+- [x] POST /n8n/callback for automated responses
+- [ ] Layered architecture refactor (routes → controller → service)
+- [ ] Response schemas (DTOs)
+- [ ] Unit tests with pytest
+- [ ] Postman collection
+- [ ] Auth/JWT
 - [ ] Live call handling via WebRTC (Meta Calling API)
-- [ ] Real-time notifications with Socket.IO
-- [ ] Post-call transcription with Whisper
-- [ ] Call summary with LLM
 
 ## License
 

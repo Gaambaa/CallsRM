@@ -27,3 +27,9 @@ async def get_contact_calls(contact_id: int, session: AsyncSession = Depends(get
     )
     calls = result.scalars().all()
     return calls
+
+@router.get("/calls")
+async def get_all_calls(session: AsyncSession = Depends(get_session)):
+    result = await session.execute(select(CallSession))
+    calls = result.scalars().all()
+    return calls

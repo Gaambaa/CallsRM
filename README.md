@@ -43,7 +43,7 @@ docker-compose up
 - [x] Forward events to n8n in real time
 - [x] Send WhatsApp messages via Meta API
 - [x] POST /n8n/callback for automated responses
-- [ ] Layered architecture refactor (routes → controller → service)
+- [x] Layered architecture refactor (routes → controller → service)
 - [ ] Response schemas (DTOs)
 - [ ] Unit tests with pytest
 - [ ] Postman collection

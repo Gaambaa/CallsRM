@@ -1,0 +1,331 @@
+{
+  "info": {
+    "_postman_id": "62d3949d-6b68-4261-b434-f3a1fb758d71",
+    "name": "CallsRM",
+    "description": "CallsRM — Open-source WhatsApp Business API CRM backend. Handles messages and calls as first-class citizens.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56401735",
+    "_collection_link": "https://go.postman.co/collection/56401735-62d3949d-6b68-4261-b434-f3a1fb758d71?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Health check endpoint. Returns service status."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /auth/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"agent@callsrm.com\",\n  \"password\": \"yourpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new agent. Returns the created user email."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /auth/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"agent@callsrm.com\",\n  \"password\": \"yourpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login and receive a JWT token. Copy the access_token and set it as the jwt_token variable."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "POST /webhooks — Incoming Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"whatsapp_business_account\",\n  \"entry\": [{\n    \"id\": \"1440641050914659\",\n    \"changes\": [{\n      \"value\": {\n        \"messaging_product\": \"whatsapp\",\n        \"contacts\": [{\"profile\": {\"name\": \"Test User\"}, \"wa_id\": \"591XXXXXXXXX\"}],\n        \"messages\": [{\n          \"id\": \"wamid.unique-id-here\",\n          \"from\": \"591XXXXXXXXX\",\n          \"timestamp\": \"1782046964\",\n          \"text\": {\"body\": \"Hello from WhatsApp\"},\n          \"type\": \"text\"\n        }]\n      },\n      \"field\": \"messages\"\n    }]\n  }]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/webhooks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "webhooks"
+              ]
+            },
+            "description": "Simulates an incoming WhatsApp message webhook from Meta. Returns 200 OK immediately and processes in background."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /webhooks — Incoming Call",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"whatsapp_business_account\",\n  \"entry\": [{\n    \"id\": \"1440641050914659\",\n    \"changes\": [{\n      \"value\": {\n        \"messaging_product\": \"whatsapp\",\n        \"calls\": [{\n          \"id\": \"wacid.unique-id-here\",\n          \"from\": \"591XXXXXXXXX\",\n          \"to\": \"591XXXXXXXXX\",\n          \"event\": \"connect\",\n          \"timestamp\": \"1780362791\",\n          \"direction\": \"USER_INITIATED\"\n        }]\n      },\n      \"field\": \"calls\"\n    }]\n  }]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/webhooks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "webhooks"
+              ]
+            },
+            "description": "Simulates an incoming WhatsApp call webhook from Meta. Chatwoot Community Edition ignores this — CallsRM captures and stores it."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Contacts",
+      "item": [
+        {
+          "name": "GET /contacts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/contacts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "contacts"
+              ]
+            },
+            "description": "List all contacts. Requires JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /contacts/:id/messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/contacts/1/messages",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "contacts",
+                "1",
+                "messages"
+              ]
+            },
+            "description": "Get message history for a specific contact. Requires JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /contacts/:id/calls",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/contacts/1/calls",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "contacts",
+                "1",
+                "calls"
+              ]
+            },
+            "description": "Get call history for a specific contact. Requires JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /calls",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/calls",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "calls"
+              ]
+            },
+            "description": "List all calls across all contacts. Requires JWT token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Messaging",
+      "item": [
+        {
+          "name": "POST /messages/send",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"591XXXXXXXXX\",\n  \"message\": \"Hello from CallsRM!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/messages/send",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "messages",
+                "send"
+              ]
+            },
+            "description": "Send a WhatsApp message manually to a contact via Meta Graph API."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /n8n/callback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_N8N_SECRET_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"591XXXXXXXXX\",\n  \"message\": \"Automated response from n8n\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/n8n/callback",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "n8n",
+                "callback"
+              ]
+            },
+            "description": "Endpoint for n8n to send automated WhatsApp responses. Requires N8N_SECRET API key in Authorization header."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    }
+  ]
+}

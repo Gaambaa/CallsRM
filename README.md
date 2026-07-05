@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="docs/assets/CallsRm.png" alt="CallsRM Logo"/>
+</p>
+
 # CallsRM
 
-CallsRM is an open-source WhatsApp Business API CRM backend that captures messages and calls as first-class citizens.
+CallsRM is an open-source WhatsApp Business API CRM backend that captures messages and calls as first-class citizens. It receives Meta webhooks, persists conversations and calls in PostgreSQL, forwards events to n8n for automation, and allows agents to reply directly via the WhatsApp API — all secured with JWT authentication.
 
 ## The Problem
 
@@ -9,6 +13,17 @@ When building WhatsApp automations with n8n, you need a CRM as an intermediary b
 Since July 2025, Meta's WhatsApp Business API supports native voice calls. Chatwoot receives these call webhooks in their Community Edition but silently ignores them — confirmed in their own codebase and GitHub issues. Their team stated that voice is an Enterprise-only feature (issue #11511, PR #13841 closed).
 
 CallsRM fills that gap: an open-source CRM that handles both messages and calls natively, designed to work alongside n8n automations.
+
+## Features
+
+-  Capture incoming WhatsApp messages and persist them to PostgreSQL
+-  Capture incoming WhatsApp calls — something Chatwoot Community Edition ignores
+-  Forward events to n8n in real time for workflow automation
+-  Send WhatsApp messages manually or via n8n automated responses
+-  JWT authentication for agent endpoints
+-  Layered architecture (routes → controller → service)
+-  Unit tests with pytest
+-  Postman collection included
 
 ## Stack
 
@@ -53,7 +68,7 @@ docker-compose up
 - [x] Auth/JWT — register and login with JWT tokens
 - [x] Response schemas (DTOs)
 - [x] Unit tests with pytest
-- [ ] Postman collection
+- [x] Postman collection
 - [ ] Propagate Meta API errors in response (token expired, 24h window, invalid number, etc.)
 - [ ] Live call handling via WebRTC (Meta Calling API)
 

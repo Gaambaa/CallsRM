@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     database_url: str
     # Optional: n8n integration
     n8n_webhook_url: str = ""
+    n8n_secret: str = ""
     # Optional: WhatsApp Business API
     whatsapp_token: str = ""
     whatsapp_phone_number_id: str = ""

@@ -51,7 +51,7 @@ docker-compose up
 - [x] POST /n8n/callback for automated responses
 - [x] Layered architecture refactor (routes → controller → service)
 - [x] Auth/JWT — register and login with JWT tokens
-- [ ] Response schemas (DTOs)
+- [x] Response schemas (DTOs)
 - [ ] Unit tests with pytest
 - [ ] Postman collection
 - [ ] Propagate Meta API errors in response (token expired, 24h window, invalid number, etc.)

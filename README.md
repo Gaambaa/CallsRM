@@ -47,7 +47,8 @@ docker-compose up
 - [ ] Response schemas (DTOs)
 - [ ] Unit tests with pytest
 - [ ] Postman collection
-- [ ] Auth/JWT
+- [X] Auth/JWT
+- [ ] Propagate Meta API errors in response (token expired, 24h window, invalid number, etc.)
 - [ ] Live call handling via WebRTC (Meta Calling API)
 
 ## License

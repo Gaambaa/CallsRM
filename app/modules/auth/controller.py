@@ -25,7 +25,7 @@ class AuthController:
         if existing:
             raise HTTPException(status_code=400, detail="Email already registered")
         user = await AuthService.create_user(session, email, password)
-        return {"message": "User created", "email": user.email}
+        return user
 
     @staticmethod
     async def login(session: AsyncSession, email: str, password: str):

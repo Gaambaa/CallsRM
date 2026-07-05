@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     # Optional: WhatsApp Business API
     whatsapp_token: str = ""
     whatsapp_phone_number_id: str = ""
+    jwt_secret: str = ""
 
     class Config:
         env_file = ".env"

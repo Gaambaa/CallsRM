@@ -65,3 +65,12 @@ class Message(SQLModel, table=True):
     type: str
     timestamp: int
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class User(SQLModel, table=True):
+    """
+    Represents an agent that can access the CallsRM dashboard.
+    """
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str
+    hashed_password: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)

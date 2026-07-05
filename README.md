@@ -52,7 +52,7 @@ docker-compose up
 - [x] Layered architecture refactor (routes → controller → service)
 - [x] Auth/JWT — register and login with JWT tokens
 - [x] Response schemas (DTOs)
-- [ ] Unit tests with pytest
+- [x] Unit tests with pytest
 - [ ] Postman collection
 - [ ] Propagate Meta API errors in response (token expired, 24h window, invalid number, etc.)
 - [ ] Live call handling via WebRTC (Meta Calling API)

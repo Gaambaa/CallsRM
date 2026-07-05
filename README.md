@@ -30,9 +30,15 @@ docker-compose up
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/webhooks` | Receive Meta webhook events |
-| GET | `/contacts` | List all contacts |
-| GET | `/contacts/{id}/messages` | Message history for a contact |
-| GET | `/contacts/{id}/calls` | Call history for a contact |
+| GET | `/health` | Health check |
+| GET | `/contacts` | List all contacts (requires JWT) |
+| GET | `/contacts/{id}/messages` | Message history for a contact (requires JWT) |
+| GET | `/contacts/{id}/calls` | Call history for a contact (requires JWT) |
+| GET | `/calls` | List all calls (requires JWT) |
+| POST | `/messages/send` | Send WhatsApp message manually |
+| POST | `/n8n/callback` | Receive automated responses from n8n (requires API key) |
+| POST | `/auth/register` | Register a new agent |
+| POST | `/auth/login` | Login and get JWT token |
 
 ## Roadmap
 
@@ -44,10 +50,10 @@ docker-compose up
 - [x] Send WhatsApp messages via Meta API
 - [x] POST /n8n/callback for automated responses
 - [x] Layered architecture refactor (routes → controller → service)
+- [x] Auth/JWT — register and login with JWT tokens
 - [ ] Response schemas (DTOs)
 - [ ] Unit tests with pytest
 - [ ] Postman collection
-- [X] Auth/JWT
 - [ ] Propagate Meta API errors in response (token expired, 24h window, invalid number, etc.)
 - [ ] Live call handling via WebRTC (Meta Calling API)
 
